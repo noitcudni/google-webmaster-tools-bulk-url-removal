@@ -12,6 +12,8 @@
             [chromex.ext.downloads :refer-macros [download]]
             [chromex.ext.browser-action :refer-macros [set-badge-text]]
             [cemerick.url :refer [url]]
+            [clojure.walk]
+            [clojure.string]
             [re-com.core :as recom]
             [testdouble.cljs.csv :as csv]
             [google-webmaster-tools-bulk-url-removal.content-script.common :as common]
@@ -197,7 +199,7 @@
                                        (when url-type (clojure.string/trim url-type))]
                                       (filter (complement nil?))
                                       ))))]
-        (log "about to call :init-victims")
+        (log "about to call :init-victims" csv-data)
         (post-message! background-port (common/marshall {:type :init-victims
                                                          :data csv-data
                                                          }))

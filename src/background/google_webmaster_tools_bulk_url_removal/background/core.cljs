@@ -96,7 +96,7 @@
                                        (prn "inside :init-victims --  whole-edn: " whole-edn)
                                        (prn "content-client: " (get-content-client))
                                        ;; clean up errors from the previous run
-                                       (clear-victims!)
+                                       (<! (clear-victims!))
                                        (set-badge-text #js{"text" ""})
                                        (reset! my-status :running)
                                        (<! (store-victims! whole-edn))
@@ -172,6 +172,7 @@
   (log (gstring/format "BACKGROUND: got chrome event (%05d)" event-num) event)
   (let [[event-id event-args] event]
     (case event-id
+      ::runtime/on-installed nil
       ::runtime/on-connect (apply handle-client-connection! event-args)
       ;; ::tabs/on-created (tell-clients-about-new-tab!)
       )))
@@ -193,7 +194,7 @@
 ; -- main entry point -------------------------------------------------------------------------------------------------------
 
 (defn init! []
-  (log "BACKGROUND: init")
+  (prn "BACKGROUND: init")
   ;; (let [ch (cwin/create (clj->js {:type "popup"
   ;;                                 ;; :left 50 :top 50
   ;;                                 :width 100 :height 100}))]
